@@ -4,42 +4,41 @@
 > + 在 GitLab 中创建代码仓库
 > + 根据初始化脚本创建数据库
 
-## 🌟 核心特性
-
-* ⚡ **高性能异步**：基于 Python 协程（`asyncio`）构建，支持高并发 I/O。
-* 🛡️ **强类型约束**：全量使用 Pydantic V2 进行数据验证与类型检查。
-* 🧪 **自动化测试**：集成 Pytest 与 Coverage.py，核心逻辑覆盖率 > 90%。
-* 🐳 **容器化支持**：多阶段构建的轻量级 Dockerfile。
-
 ---
 
 ## 🏗 技术栈与架构
 
 ### 1. 技术选型
 
-| 模块 | 技术方案                      | 说明 |
-| --- |---------------------------| --- |
-| **核心框架** | FastAPI                 | 异步高性能 Web 框架 |
-| **依赖管理** | uv                      | 现代化的包管理工具 |
-| **数据库** | PostgreSQL / Redis        | 关系型与缓存 |
-| **ORM** | SQLAlchemy 2.0 / Tortoise | 异步 ORM |
-| **后台任务** | Celery / Redis          | 异步任务队列 |
+| 模块       | 技术方案                      | 说明           |
+|----------|---------------------------|--------------|
+| **依赖管理** | uv                        | 现代化的包管理工具    |
+| **核心框架** | FastAPI                   | 异步高性能 Web 框架 |
+| **应用框架** | LangChain 1.0+            | Agent 开发框架   |
+| **后台任务** | Celery / Redis            | 异步任务队列       |
+| **ORM**  | SQLAlchemy 2.0 / Tortoise | 异步 ORM       |
+| **数据库**  | PostgreSQL / Redis        | 关系型与缓存       |
 
-### 2. 项目布局
+### 2. 项目结构
 
 ```text
 ke-devops-assistant
-├── .python-version    # uv 自动生成的 Python 版本定义
-├── pyproject.toml     # 项目元数据与依赖定义
-├── uv.lock            # 强一致性依赖锁文件
 ├── app/               # 源代码核心
 │   ├── api/           # 接口路由层
+│   ├── components/    # 全局组件
 │   ├── core/          # 全局配置、异常、安全设置
-│   ├── services/      # 业务逻辑层 (Service Layer)
-│   └── models/        # 数据库模型 (SQLAlchemy/Pydantic)
+│   ├── models/        # 数据库模型 (SQLAlchemy/Pydantic)
+│   └── services/      # 业务逻辑层 (Service Layer)
+├── scripts/           # 脚本文件夹
 ├── tests/             # pytest 测试用例
 ├── .env.example       # 环境变量示例
-└── docker-compose.yml # 本地容器化开发环境
+├── .gitignore         # Git Ignore 文件
+├── .python-version    # uv 自动生成的 Python 版本定义
+├── docker-compose.yml # 本地容器化开发环境
+├── Dockerfile         # Dockerfile 文件
+├── pyproject.toml     # 项目元数据与依赖定义
+├── README.md          # readme 文件
+└── uv.lock            # 强一致性依赖锁文件
 
 ```
 
@@ -50,18 +49,19 @@ ke-devops-assistant
 ### 前置要求
 
 * **Python**: 3.11+
-* **uv**: 1.5.0+ (安装命令：`pip install poetry`)
+* **uv**: 1.5.0+
 
 ### 1. 环境安装
 
 ```bash
 # 克隆项目
 git clone https://github.com/your-repo/python-project.git
-cd python-project
+cd ke-devops-assistant
 
 # 安装 uv
 # macOS/Linux
 curl -LsSf https://astral.sh/uv/install.sh | sh
+
 # Windows (PowerShell)
 powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
 
@@ -70,9 +70,17 @@ powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
 ### 2. 配置环境
 
 ```bash
-cp .env.example .env
 # 编辑 .env 文件，修改数据库地址、API 密钥等
+cp .env.example .env
+```
 
+**安装依赖**
+```cmd
+uv add langchain==1.2.7
+uv add langchain-openai==1.1.7
+uv add langchain-deepseek==1.0.1
+
+uv add python-dotenv
 ```
 
 ### 3. 运行服务
@@ -80,7 +88,6 @@ cp .env.example .env
 ```bash
 # 使用 Uvicorn 启动 (FastAPI)
 uvicorn app.main:app --reload
-
 ```
 
 ---
@@ -93,7 +100,6 @@ uv run ruff format .
 
 # 静态代码检查与自动修复
 uv run ruff check . --fix
-
 ```
 
 ## 自定化测试
