@@ -1,6 +1,6 @@
 from langchain_deepseek import ChatDeepSeek
 
-from config.deepseek_config import DeepSeekConfig
+from agent.config.deepseek_config import DeepSeekConfig
 
 # DeepSeek 大语言模型
 deepseek_llm = ChatDeepSeek(base_url=DeepSeekConfig.base_url,
