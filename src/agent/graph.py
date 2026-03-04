@@ -4,6 +4,7 @@ from langgraph.graph import StateGraph
 from typing_extensions import TypedDict
 
 from agent.util.gitlab_tools import create_gitlab_project_impl
+from agent.util.mysql_tools import create_mysql_database_impl
 
 class DevOpsState(TypedDict):
     """DevOps 工作流状态."""
@@ -20,8 +21,9 @@ def create_gitlab_project(state: DevOpsState):
 
 def create_database(state: DevOpsState):
     """创建项目数据库."""
-    print("成功创建 mysql 数据库")
-    return {"is_database_created": True}
+    # 直接使用项目名称作为数据库名称
+    result = create_mysql_database_impl(state["project_name"])
+    return result
 
 graph_builder = StateGraph(DevOpsState)
 
