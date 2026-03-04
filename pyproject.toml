@@ -12,7 +12,9 @@ dependencies = [
     "langchain-deepseek>=1.0.1",
     "langchain-openai>=1.1.10",
     "langgraph>=1.0.0",
+    "pytest>=9.0.2",
     "python-dotenv>=1.0.1",
+    "python-gitlab>=4.0.0",
 ]
 
 
