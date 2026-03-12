@@ -1,22 +1,31 @@
+from langchain_core.messages import AnyMessage
 from langgraph.constants import END, START
-from langgraph.graph import StateGraph
-from typing_extensions import TypedDict
+from langgraph.graph import StateGraph, add_messages
+from typing_extensions import TypedDict, Annotated
 
 
 class DevOpsState(TypedDict):
+    messages: Annotated[list[AnyMessage], add_messages]
     project_name: str
     project_path: str
 
 def llm_node(state: DevOpsState):
+    print('进入节点：llm_node')
+    print(state)
+
     return { "project_name": "测试项目" }
 
-def tool_node(state: DevOpsState):
-    return { "project_path": "test-project" }
-
 def routing_func(state: DevOpsState):
-    if state["project_path"] == "test-project":
-        return "tool_node"
+    print('进入节点：routing_func')
+    print(state)
+
     return END
+
+def tool_node(state: DevOpsState):
+    print('进入节点：tool_node')
+    print(state)
+
+    return { "project_path": "test-project" }
 
 agent_builder = StateGraph(DevOpsState)
 
