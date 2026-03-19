@@ -1,8 +1,7 @@
 from datetime import datetime
 from typing import Union
 
-from openai import BaseModel
-from pydantic import Field
+from pydantic import BaseModel, Field
 
 class BaseUserSchema(BaseModel):
     id: str = Field(description="用户标识", default=None)

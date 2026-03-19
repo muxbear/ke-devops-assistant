@@ -31,11 +31,11 @@ def get_user_by_name(username: str) -> UserSchema:
     return user_schema
 
 @user_router.post("/register", response_model=UserSchema, summary="用户注册", description="用户注册")
-def register(create_or_update_user: CreateOrUpdateUserSchema):
+def register(body: CreateOrUpdateUserSchema):
     user_schema = UserSchema(
         id="1001",
-        username=create_or_update_user.username,
-        age=create_or_update_user.age
+        username=body.username,
+        age=body.age
     )
     return user_schema
 
