@@ -14,3 +14,12 @@ deepseek_llm = ChatDeepSeek(api_key=os.getenv("DEEPSEEK_API_KEY"),
 dashscope_llm = ChatOpenAI(base_url=os.getenv("DASHSCOPE_BASE_URL"),
                            api_key=os.getenv("DASHSCOPE_API_KEY"),
                            model='qwen-plus')
+
+zhipu_llm = ChatOpenAI(base_url=os.getenv("ZHIPUAI_BASE_URL"),
+                       api_key=os.getenv("ZHIPUAI_API_KEY"),
+                       model='glm-5')
+
+kimi_llm = ChatOpenAI(base_url=os.getenv("KIMI_BASE_URL"),
+                      api_key=os.getenv("KIMI_API_KEY"),
+                      model='kimi-k2.5')
+

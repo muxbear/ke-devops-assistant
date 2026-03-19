@@ -10,7 +10,6 @@ from agent.config.gitlab_config import GitLabConfig
 
 logger = logging.getLogger(__name__)
 
-
 def _sanitize_path(name: str) -> str:
     """将名称转换为有效的 GitLab 路径."""
     # 首先处理中文拼音化或使用简单映射
@@ -29,11 +28,9 @@ def _sanitize_path(name: str) -> str:
         path = 'group'
     return path
 
-
-def create_gitlab_project_impl(
-    project_group: str, project_name: str, project_description: str
-) -> dict[str, bool]:
-    """在 GitLab 上创建项目仓库的内部实现.
+@tool
+def create_gitlab_project(project_group: str, project_name: str, project_description: str) -> dict[str, bool]:
+    """在 GitLab 上创建项目仓库.
 
     Args:
         project_group: 项目组名,用于创建或查找所属组.
@@ -48,7 +45,7 @@ def create_gitlab_project_impl(
     # 处理中文项目组名和项目名
     group_path = _sanitize_path(project_group)
     project_path = _sanitize_path(project_name)
-    
+
     try:
         group = gl.groups.get(group_path)
     except gitlab.GitlabGetError:
@@ -72,17 +69,15 @@ def create_gitlab_project_impl(
     logger.info(f"成功创建 GitLab 仓库: {project.web_url}")
     return {"is_gitlab_created": True}
 
-
 @tool
-def create_gitlab_project(project_group: str, project_name: str, project_description: str) -> dict[str, bool]:
-    """在 GitLab 上创建项目仓库.
-
+def build_gitlab_repository(project_group: str, project_path: str) -> bool:
+    """在 gitlab 中创建一个仓库
     Args:
-        project_group: 项目组名,用于创建或查找所属组.
-        project_name: 项目名称,用作仓库路径.
-        project_description: 项目描述.
+        project_group: 仓库所在组（项目客户当作项目所在组）
+        project_path: 仓库路径（项目的名称当作项目路径）
 
     Returns:
-        包含是否创建成功的字典.
+        bool: 是否成功创建
     """
-    return create_gitlab_project_impl(project_group, project_name, project_description)
+    print(f'成功创建 gitlab 仓库 {project_group}/{project_path}')
+    return True
